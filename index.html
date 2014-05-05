@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>System Stack Diagram Drawing Tool v0.9</title>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="stack.css" rel="stylesheet">
+  
+<link rel="icon" type="image/png" href="http://www.winterwell.com/favicon.ico">
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="http://rawgit.com/winterstein/SJTest/master/SJTest.min.js"></script>
+<script src="http://help.soda.sh/static/code/base/utils/Url.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
+
+<meta property="og:url" content="http://sodash.com"/>
+<meta itemprop="url" content="http://sodash.com"/>
+<meta property="og:site_name" content="SoDash"/>
+<meta itemprop="name" content="System Stack DIagram Drawing Tool"/>
+<meta property="og:title" content="System Stack DIagram Drawing Tool"/>
+<meta property="og:type" content="article"/>
+<meta itemprop="description" content="Draw software stacks and simple architecture diagrams"/>
+<meta property="og:image" content="http://sodash.com/img/sodash.png"/>
+<meta itemprop="image" content="http://sodash.com/img/sodash.png"/>
+
+
+</head>
+<body>
+	<div id='wrap'>
+		<!-- NAVBAR -->
+		<div class="navbar navbar-fixed-top" role='navigation'>
+			  <div class="container">
+				<div class="navbar-header">
+				  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				    <span class="icon-bar"></span>
+				    <span class="icon-bar"></span>
+				    <span class="icon-bar"></span>
+				  </button>
+				  <a class="navbar-brand" href="http://sodash.com"><img class='logo' src="http://sodash.com/img/sodash.png" alt="SoDash"></a>
+				</div>
+				<div class="collapse navbar-collapse">
+				  <ul class="nav navbar-nav">
+				  <!-- no nav needed -->
+				  	<li><h3>System-Stack Diagram Editor</h3></li>
+				  </ul>
+				</div><!--/.nav-collapse -->
+			  </div>
+			</div><!-- End NAVBAR -->
+
+		
+		<div id='page-main' data-target="#MainNav">
+			<div class='container-fluid'><div class="row">
+				<div class="col-md-5">
+
+<form>
+<div class="form-group">
+		<button class='btn btn-primary' onclick="updateDia();"><span class="glyphicon glyphicon-tasks"></span><span class="glyphicon glyphicon-pencil"></span> Draw</button>
+		<button class='btn btn-lg' onclick="save(this);"  data-loading-text="Saving..."><span class="glyphicon glyphicon-floppy-save"></span> Save</button>
+	
+<textarea id='diasrc' class='form-control' cols="6">
+</textarea>
+</div>
+</form>
+
+	</div><!-- ./editor column -->
+	<div class='col-md-7'>
+
+		<div id='diadraw'></div>
+
+<script>
+
+// look for #myslug
+var locn=""+window.location;
+var slug = "";
+if (locn.match(/#(\w+)/)) {
+	slug = locn.match(/#(\w+)/)[1];
+	load();
+} else {
+	// random
+	slug = makeid();
+	// set the hash
+	window.location = locn+"#"+slug;
+}
+console.log("slug", slug);
+
+// By csharptest.net, c.f. http://stackoverflow.com/questions/1349404/generate-a-string-of-5-random-characters-in-javascript
+function makeid(len)
+{
+	if (!len) len = 20; // a nice long (uncrackable without a lot of patience) length
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < len; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+function updateDia() {
+	var text = $('#diasrc').val();
+	var lines = text.split("\n").length;
+	lines = Math.max(lines+2, 6);
+	var fontSize = $('#diasrc').css('font-size');
+	var lineHeight = Math.floor(parseInt(fontSize.replace('px','')) * 1.4);
+	$('#diasrc').height(lines*lineHeight);
+	console.log("Lines", lines, "height", lines*20);
+
+	// clear all out
+	$('#diadraw').html("");
+
+	// any 2 line-breaks = a new diagram
+	var dias = text.split(/(\r\n\s*\r\n|\n\s*\n|\r\s*\r)\s*/);
+	
+	for(var di=0; di<dias.length; di++) {
+		var dia = dias[di].trim();
+		if ( ! dia) continue;
+		updateDia2(dia);
+	}
+}
+
+function load() {
+	assert(slug);
+	$.get('http://stash.soda.sh/daniel-stash/'+slug+'.json')
+		.done(function(result) {
+			$('#diasrc').val(result.cargo);		
+			updateDia();	
+		});
+}
+function save(el) {
+	assert(slug);
+	var $button = $(el);
+	$button.button('loading');
+	var stash = escape($('#diasrc').val());
+	var f = $.get('http://stash.soda.sh/daniel-stash/'+slug+'.json?action=save&stash='+stash);
+	f.fail(function(err) {		
+		var popup = $('<div class="alert alert-danger fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>Bogus!</strong> '+JSON.stringify(err)+'</div>');
+		$('#page-main').prepend(popup);
+	});
+	f.done(function(err) {		
+		var popup = $('<div class="alert alert-success fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Saved :)</div>');
+		$('#page-main').prepend(popup);
+	});
+	f.always(function() {
+		$button.button('reset');
+	});
+}
+
+function updateDia2(text) {
+	var rows = text.split('\n');
+	if ( ! rows) return;
+	// width?
+	var cols = 0;
+	for(var ri=0; ri<rows.length; ri++) {
+		var blocks = rows[ri].split(/\]\s*\[/);
+		cols = Math.max(cols, blocks.length);	
+	}
+
+	var wrapper = $("<div class='dia panel panel-primary'></div>");
+	var ri=0;
+	var title = "System Stack Diagram";
+	if (rows[0].charAt(0) !== '[') {
+		title = rows[0];
+		ri++;
+	}
+	wrapper.append("<div class='panel-heading'><h3 class='panel-title'>"+title+"</h3></div>");
+
+	var tbl = $("<table class='dia'></table>");
+	for(; ri<rows.length; ri++) {
+		// # or // for title or comments
+		if (rows[ri].charAt(0)==='#' || rows[ri].substring(0,2)==='//') continue;
+		if (rows[ri].match(/^\s*$/)) continue;
+		var blocks = rows[ri].split(/\]\s*\[/);
+		if (blocks.length==0) continue;
+		var row = $("<tr></tr>");
+		for(var bi=0; bi<blocks.length; bi++) {
+			var block = blocks[bi];
+			block = block.replace(/\[|\]/g,'');
+			var w = 1;
+			var bbits = block.trim().split(":");
+			var hasWidth=false;
+			if (bbits[bbits.length-1].match(/\d+/)) {
+				w = bbits[bbits.length-1];
+				hasWidth = true;
+			} else if (bbits[bbits.length-1]==='width') {
+				w = cols;
+				hasWidth = true;
+			} else if (blocks.length===1) w=cols;
+			// From OS:Linux, take class = OS for possible styling
+			var bclass = "";
+			if (bbits[0].match(/^\w+$/)) bclass = bbits[0];
+			var bname = bbits[0];
+			if (bbits.length>2 || (bbits.length>1 && ! hasWidth)) {
+				bname += ": "+bbits[1];
+			}
+			if (bname==='gap') {bname =''; bclass='gap'}
+			// bold
+			bname = bname.replace(/\*(.+?)\*/g, "<b>$1</b>");
+			// notes
+			bname = bname.replace(/\((.+?)\)/g, "<small>($1)</small>");
+			
+			$b = $("<td class='"+bclass+"' colspan='"+w+"'>"+bname+"</td>");
+		  	row.append($b);
+	   }
+	   tbl.append(row);
+	}
+
+	wrapper.append(tbl);
+	$('#diadraw').append(wrapper);
+
+	iconise();
+}
+
+/** TODO It'd be nice to have icons for Java, Linux etc. */
+function iconise() {
+
+}
+
+
+updateDia();
+ $('#diasrc').change(updateDia());
+
+$('.btn').button();
+</script>
+
+	</div><!-- ./row --></div><!-- ./container -->
+
+	
+		</div><!-- end page-main -->
+
+		<div id="push"></div>
+	</div><!-- end wrap -->
+
+	<!-- FOOTER -->
+	<div id='footer'>
+		<div class='container'>
+			<a id="link-to-top" href="#" title="Return to the top of the page" class="hideme">&uarr;</a>
+			
+			<div class='credits'>
+				Scratch code by <a href='http://github.com/winterstein'>Daniel</a> courtesy of <a href='http://www.winterwell.com'>Winterwell</a> <!-- photo is (cc) Tym/Proggie on Flickr -->
+			</div>
+
+		</div>
+	</div><!-- End FOOTER -->
+	<!-- Naturally... -->
+	<script src='http://rawgithub.com/winterstein/SJTest/master/SJTest.js'></script>
+	<script>
+		SJTest.runScriptFromUrl();
+	</script>
+	<!-- Google tracker code -->
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45363624-2', 'winterwell.com');
+  ga('send', 'pageview');
+
+	</script>
+</body>
+</html>
