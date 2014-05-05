@@ -1,0 +1,82 @@
+
+html {
+	overflow-y: scroll;
+}
+
+a, a:visited {
+	color:#327b9a;
+}
+
+div.navbar {
+	background:white;
+	box-shadow: 0px 0px 10px #999;
+}
+.navbar-toggle {
+	background:#428bca;
+}
+.navbar-toggle:hover {
+	background:#327bba;
+}
+.navbar-toggle .icon-bar {
+	background:#ccc;
+}
+.navbar-brand img.logo {
+	height:20px;
+}
+
+.navbar {
+	border: 0px;
+}
+
+
+
+#page-main, #page-about {
+	padding-top:70px;
+	margin-left:10px;
+	margin-right:10px;
+}
+
+#footer {
+	width:100%;	
+	padding:10px;
+}
+#footer .container {
+	width:100%;
+	margin-bottom:0px;
+}
+#footer .container img {
+	margin-right:30px;
+}
+
+
+dia.wrapper: {
+}
+
+table.dia {
+	margin:20px;
+	border-spacing:1px;
+	border-collapse: separate;
+}
+
+table.dia td {
+	border: 2px solid #333;
+	border-radius: 6px;
+	padding:6px;
+	background:#eee;
+	text-align: center;
+}
+
+table.dia td.OS {
+	border-radius:0px;
+}
+
+
+table.dia td.gap {
+	border:0;
+	background:white;
+}
+
+table.dia td.http {
+	border:0;
+	background:white;
+}
