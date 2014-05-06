@@ -154,7 +154,7 @@ function updateDia2(text) {
 
 	if (footnotes) {
 		var ul = $("<ul></ul>");
-		for(var fk : footnotes) {
+		for(var fk in footnotes) {
 			ul.append("<li>"+fk+": "+footnotes[fk]+"</li>");
 		}
 		wrapper.append(ul);	
