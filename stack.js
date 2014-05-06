@@ -1,4 +1,4 @@
-/** file: stack.js Very Hacky Stack Diagram Editor **/
+/* file: stack.js Very Hacky Stack Diagram Editor */
 
 // look for #myslug
 var locn=""+window.location;
@@ -177,5 +177,5 @@ $('#diasrc').change(updateDia());
 $(function() {
 	updateDia();
 	$('.btn').button();
-}
+});
 
