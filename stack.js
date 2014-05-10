@@ -53,8 +53,10 @@ function load() {
 	assert(slug);
 	$.get('http://stash.soda.sh/daniel-stash/'+slug+'.json')
 		.done(function(result) {
-			$('#diasrc').val(result.cargo);		
-			updateDia();	
+			if (result.cargo) {
+				$('#diasrc').val(result.cargo);				
+				updateDia();	
+			}
 		});
 }
 function save(el) {
