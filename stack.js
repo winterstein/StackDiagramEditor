@@ -130,13 +130,14 @@ function updateDia2(text) {
 				w = cols;
 				hasWidth = true;
 			} else if (blocks.length===1) w=cols;
-			// From OS:Linux, take class = OS for possible styling
-			var bclass = "";
-			if (bbits[0].match(/^\w+$/)) bclass = bbits[0];
 			var bname = bbits[0];
 			if (bbits.length>2 || (bbits.length>1 && ! hasWidth)) {
 				bname += ": "+bbits[1];
 			}
+			// Take first word as class for possible styling
+			var bclass = "";
+			if (bname.match(/^(\w+)/)) bclass = bname.match(/^(\w+)/)[0].toLowerCase();
+			// gap
 			if (bname==='gap') {bname =''; bclass='gap'}
 			// bold
 			bname = bname.replace(/\*(.+?)\*/g, "<b>$1</b>");

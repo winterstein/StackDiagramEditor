@@ -65,8 +65,12 @@ table.dia td {
 	background:#eee;
 	text-align: center;
 }
+/* new lines for (comments) */
+table.dia td small {
+	display: block;
+}
 
-table.dia td.OS {
+table.dia td.os {
 	border-radius:0px;
 }
 
@@ -79,4 +83,10 @@ table.dia td.gap {
 table.dia td.http {
 	border:0;
 	background:white;
+}
+
+/* TODO define some icons */
+table.dia td.php {
+/*	padding-left: 24px; */
+   	/*background: transparent url() no-repeat center left; */
 }

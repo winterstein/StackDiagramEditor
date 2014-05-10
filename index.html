@@ -57,10 +57,26 @@
 
 <form>
 <div class="form-group">
-		<button class='btn btn-primary' onclick="updateDia();"><span class="glyphicon glyphicon-tasks"></span><span class="glyphicon glyphicon-pencil"></span> Draw</button>
-		<button class='btn btn-lg' onclick="save(this);"  data-loading-text="Saving..."><span class="glyphicon glyphicon-floppy-save"></span> Save</button>
+		<button class='btn btn-default' onclick="updateDia();"><span class="glyphicon glyphicon-tasks"></span><span class="glyphicon glyphicon-pencil"></span> Draw</button>
+		<button class='btn btn-default' onclick="save(this);"  data-loading-text="Saving..."><span class="glyphicon glyphicon-floppy-save"></span> Save</button>
 	
 <textarea id='diasrc' class='form-control' cols="6">
+Example Title
+[Use square brackets][for][blocks]
+[A single block spans]
+[Use :number :2][to set the width:1]
+[Use ^ for footnotes^1][Use * for *bold*]
+[Use gap for gaps][gap][like this]
+[If a block starts with a recognised word][Special formatting applies, e.g]
+[OS:Linux][http: Twitter API]
+1: Footnotes are defined at the bottom.
+
+A 2nd Example: LAMP
+[My App]
+[PHP]
+[MySQL][Apache]
+[OS:Linux]
+
 </textarea>
 </div>
 </form>
