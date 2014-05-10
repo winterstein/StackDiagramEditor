@@ -140,9 +140,9 @@ function updateDia2(text) {
 			var bclass = "";
 			if (bname.match(/^(\w+)/)) bclass = bname.match(/^(\w+)/)[0].toLowerCase();
 			// gap
-			if (bname==='gap') {bname =''; bclass='gap'}
-			// bold
-			bname = bname.replace(/\*(.+?)\*/g, "<b>$1</b>");
+			if (bname==='gap' || ! bname) {bname =''; bclass='gap'}
+			// *bold*, but not a * b
+			bname = bname.replace(/\*(\S.*?)\*/g, "<b>$1</b>");
 			// (notes)
 			bname = bname.replace(/\((.+?)\)/g, "<small>($1)</small>");
 			// ^footnotes
