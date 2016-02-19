@@ -59,15 +59,21 @@
 		<button class='btn btn-default' onclick="updateDia();"><span class="glyphicon glyphicon-tasks"></span><span class="glyphicon glyphicon-pencil"></span> Draw</button>
 		<button class='btn btn-default' onclick="save(this);"  data-loading-text="Saving..."><span class="glyphicon glyphicon-floppy-save"></span> Save</button>
 	
-<textarea id='diasrc' class='form-control' cols="6">
+<textarea id='diasrc' class='form-control' rows="20" cols="6">
 Example Title
 [Use square brackets][for][blocks]
 [A single block spans]
-[Use :number :2][to set the width:1]
-[Use ^ for footnotes^1][Use * for *bold*]
+[Use :number :2][to set the width]
+[Or widthxheight to set width and height :2x2][Use ^ for footnotes^1]
+[][][Use * for *bold*]
 [Use an empty block for gaps][][like this]
 [If a block starts with a recognised word][Special formatting applies, e.g]
 [OS:Linux][http: Twitter API]
+[Use i:icon_name for an icon^2][Glyphicons i:glyphicon-globe are recognised]
+1: Footnotes are defined at the bottom.
+2: Icons are also defined at the bottom, like this:
+icon_name = https://upload.wikimedia.org/wikipedia/commons/b/b1/Farm-Fresh_database_lightning.png
+
 1: Footnotes are defined at the bottom.
 
 A 2nd Example: LAMP

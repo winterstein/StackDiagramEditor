@@ -29,6 +29,10 @@ function makeid(len)
 
 function updateDia() {
 	var text = $('#diasrc').val();
+	if ( ! text) {
+		console.warn("No text?");
+		return;
+	}
 	var lines = text.split("\n").length;
 	lines = Math.max(lines+2, 6);
 	var fontSize = $('#diasrc').css('font-size');
@@ -50,6 +54,7 @@ function updateDia() {
 }
 
 function load() {
+	console.log('load '+slug);
 	assert(slug);
 	$.get('http://stash.soda.sh/daniel-stash/'+slug+'.json')
 		.done(function(result) {
@@ -60,6 +65,7 @@ function load() {
 		});
 }
 function save(el) {
+	console.log('save '+slug);
 	assert(slug);
 	var $button = $(el);
 	$button.button('loading');
@@ -105,7 +111,7 @@ function updateDia2(text) {
 			footnotes[fnote[1]] = fnote[2];
 		}
 	}
-	console.log(footnotes);
+	console.log("footnotes",footnotes);
 
 	var tbl = $("<table class='dia'></table>");
 	for(; ri<rows.length; ri++) {
@@ -122,19 +128,25 @@ function updateDia2(text) {
 		for(var bi=0; bi<blocks.length; bi++) {
 			var block = blocks[bi];
 			block = block.replace(/\[|\]/g,'');
-			var w = 1;
-			var bbits = block.trim().split(":");
-			var hasWidth=false;
-			if (bbits[bbits.length-1].match(/\d+/)) {
-				w = bbits[bbits.length-1];
+			var bname = block.trim();
+			// Set the width
+			var w = 1, h=1;
+			var bbits = bname.split(":");
+			var lastBit = bbits[bbits.length-1];
+			var hasWidth=false;			
+			if (lastBit.match(/^\d+$/)) {
+				w = lastBit;
 				hasWidth = true;
-			} else if (bbits[bbits.length-1]==='width') {
-				w = cols;
+			} else if (lastBit.match(/\d+x\d+/)) {
 				hasWidth = true;
+				var wh = lastBit.split("x");
+				w = wh[0];
+				h = wh[1];
 			} else if (blocks.length===1) w=cols;
-			var bname = bbits[0];
-			if (bbits.length>2 || (bbits.length>1 && ! hasWidth)) {
-				bname += ": "+bbits[1];
+			
+			// Remove the last-bit?
+			if (hasWidth && bbits.length > 1) {
+				bname = bname.substr(0,bname.length-lastBit.length-1);
 			}
 			// Take first word as class for possible styling
 			var bclass = "";
@@ -145,9 +157,9 @@ function updateDia2(text) {
 			bname = bname.replace(/\*(\S.*?)\*/g, "<b>$1</b>");
 			// (notes)
 			bname = bname.replace(/\((.+?)\)/g, "<small>($1)</small>");
-			// ^footnotes
+			// ^footnotes			
 			bname = bname.replace(/\^(\w+)/g, "<sup>$1</sup>");
-			$b = $("<td class='"+bclass+"' colspan='"+w+"'>"+bname+"</td>");
+			$b = $("<td class='"+bclass+"' colspan='"+w+"' "+(h!=1?"rowspan='"+h+"'":"")+" >"+bname+"</td>");
 		  	row.append($b);
 	   }
 	   tbl.append(row);
@@ -156,9 +168,9 @@ function updateDia2(text) {
 	wrapper.append(tbl);
 
 	if (footnotes) {
-		var ul = $("<ul></ul>");
+		var ul = $("<ol></ol>");
 		for(var fk in footnotes) {
-			ul.append("<li>"+fk+": "+footnotes[fk]+"</li>");
+			ul.append("<li>"+footnotes[fk]+"</li>");
 		}
 		wrapper.append(ul);	
 	}
@@ -178,7 +190,7 @@ $('#diasrc').change(updateDia());
 
 // initialise after page load
 $(function() {
-	updateDia();
+	setTimeout(updateDia, 50);
 	$('.btn').button();
 });
 
