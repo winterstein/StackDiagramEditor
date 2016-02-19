@@ -90,3 +90,10 @@ table.dia td.php {
 /*	padding-left: 24px; */
    	/*background: transparent url() no-repeat center left; */
 }
+
+
+@media print {
+	.noprint {
+		display: none !important;
+	}
+}
