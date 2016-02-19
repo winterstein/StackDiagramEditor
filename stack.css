@@ -48,6 +48,12 @@ div.navbar {
 	margin-right:30px;
 }
 
+.dia {
+	font-size:120%;
+}
+.dia h2 {
+	font-size:125%;	
+}
 
 dia.wrapper: {
 }

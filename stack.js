@@ -101,7 +101,7 @@ function updateDia2(text) {
 		title = rows[0];
 		ri++;
 	}
-	wrapper.append("<div class='panel-heading'><h3 class='panel-title'>"+title+"</h3></div>");
+	wrapper.append("<div class='panel-heading'><h2 class='panel-title'>"+title+"</h2></div>");
 
 	// collect footnote definitions
 	var footnotes = {};
@@ -129,8 +129,14 @@ function updateDia2(text) {
 			var block = blocks[bi];
 			block = block.replace(/\[|\]/g,'');
 			var bname = block.trim();
+			// icons
+			bname = bname.replace(/i:([\w-]+)/g, function(m,g1,pos){
+				var di = DeviconList.find(g1);
+				var icon = di || g1;
+				return "<i class='"+icon+"'></i>";
+			});
 			// Set the width
-			var w = 1, h=1;
+			var w = 1, h=1;			
 			var bbits = bname.split(":");
 			var lastBit = bbits[bbits.length-1];
 			var hasWidth=false;			

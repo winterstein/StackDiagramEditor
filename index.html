@@ -7,13 +7,15 @@
 <!-- Bootstrap -->
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
 <link href="stack.css" rel="stylesheet">
-  
+<link rel="stylesheet" href="https://cdn.rawgit.com/konpa/devicon/master/devicon.min.css">
+
 <link rel="icon" type="image/png" href="http://www.winterwell.com/favicon.ico">
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script src="http://rawgit.com/winterstein/SJTest/master/SJTest.min.js"></script>
 <script src="http://help.soda.sh/static/code/base/utils/Url.js"></script>
+<script src="devicon-list.js"></script>
 <script src="stack.js"></script>
 
 <meta property="og:url" content="http://sodash.com"/>
@@ -65,16 +67,13 @@ Example Title
 [A single block spans]
 [Use :number :2][to set the width]
 [Or widthxheight to set width and height :2x2][Use ^ for footnotes^1]
-[][][Use * for *bold*]
+[Use * for *bold*]
 [Use an empty block for gaps][][like this]
 [If a block starts with a recognised word][Special formatting applies, e.g]
 [OS:Linux][http: Twitter API]
-[Use i:icon_name for an icon^2][Glyphicons i:glyphicon-globe are recognised]
+[Use i : icon-name for an icon, e.g. i:apple i:android ^2]
 1: Footnotes are defined at the bottom.
-2: Icons are also defined at the bottom, like this:
-icon_name = https://upload.wikimedia.org/wikipedia/commons/b/b1/Farm-Fresh_database_lightning.png
-
-1: Footnotes are defined at the bottom.
+2: Icons are from http://devicon.fr/
 
 A 2nd Example: LAMP
 [My App]
